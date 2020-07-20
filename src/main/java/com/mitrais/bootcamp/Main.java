@@ -27,24 +27,31 @@ import java.util.Scanner;
  */
 public class Main {
 
-    private static Screen welcomeScreen;
-    private static ATMData userDetail;
-    private static Transaction withdrawalService;
-    private static Transaction fundTransferService;
-    private static ATMRepository atmRepository;
-    private static long withdrawalAmount;
+    private Screen welcomeScreen;
+    private Transaction withdrawalService;
+    private Transaction fundTransferService;
+    private long withdrawalAmount;
+    private ATMData userDetail;
+
+    public Main(Transaction withdrawalService, Transaction fundTransferService, Screen welcomeScreen) {
+        this.withdrawalService = withdrawalService;
+        this.fundTransferService = fundTransferService;
+        this.welcomeScreen = welcomeScreen;
+    }
 
     public static void main(String[] args) {
-        atmRepository =  new ATMRepository();
-        welcomeScreen();
+        ATMRepository atmRepository = new ATMRepository();
+        Screen welcomeScreen = new WelcomeScreenImpl(atmRepository);
+        Transaction fundTransferService = new FundTransferServiceImpl(atmRepository);
+        Transaction withdrawalService = new WithdrawalServiceImpl(atmRepository);
+        Main main = new Main(withdrawalService, fundTransferService, welcomeScreen);
+        main.welcomeScreen();
 
     }
 
-    public static void welcomeScreen(){
+    public void welcomeScreen(){
 
         System.out.println();
-
-        welcomeScreen = new WelcomeScreenImpl(atmRepository);
 
         ATMSimulationResult<Object> welcomeScreenResponse = welcomeScreen.renderScreen();
         if(welcomeScreenResponse.isSuccess()){
@@ -56,7 +63,7 @@ public class Main {
         }
     }
 
-    public static void transactionScreen(){
+    public void transactionScreen(){
         System.out.println();
         Scanner scanner = new Scanner(System.in);
         int option = 0;
@@ -83,7 +90,7 @@ public class Main {
 
     }
 
-    public static void withdrawScreen(){
+    public void withdrawScreen(){
         System.out.println();
         Scanner scanner = new Scanner(System.in);
         int option = 0;
@@ -96,7 +103,7 @@ public class Main {
                 option = Integer.parseInt(opt);
                 if (option < 1 || option >= 5) {
                     transactionScreen();
-                } else if(option >= 1 && option <= 3){
+                } else if(option <= 3){
 
                     switch (option) {
                         case 1:
@@ -110,7 +117,7 @@ public class Main {
                             doWithdrawal(WithdrawalType.COMMON);
                     }
 
-                } else if(option == 4){
+                } else {
                     otherWithdrawScreen();
                 }
             }
@@ -118,7 +125,7 @@ public class Main {
         }
     }
 
-    public static void otherWithdrawScreen(){
+    public void otherWithdrawScreen(){
         System.out.println();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Other Withdraw");
@@ -135,16 +142,14 @@ public class Main {
         }
     }
 
-    public static void doWithdrawal(WithdrawalType withdrawalType){
-
-        withdrawalService = new WithdrawalServiceImpl(atmRepository);
+    public void doWithdrawal(WithdrawalType withdrawalType){
 
         WithdrawalRequest withdrawalRequest = new WithdrawalRequest();
         withdrawalRequest.setAccountNumber(userDetail.getAccountNumber());
         withdrawalRequest.setAmount(withdrawalAmount);
 
-        ATMSimulationResult<Object> withdrawalResponse = withdrawalService.execute(withdrawalRequest);
-        if(withdrawalResponse.isSuccess() != true){
+        ATMSimulationResult<Transactionable> withdrawalResponse = withdrawalService.execute(withdrawalRequest);
+        if(!withdrawalResponse.isSuccess()){
             System.out.println(withdrawalResponse.getErrorContext().getErrorMessage());
             System.out.println();
             if(WithdrawalType.COMMON == withdrawalType){
@@ -158,7 +163,7 @@ public class Main {
         }
     }
 
-    public static void summaryScreen(long amount){
+    public void summaryScreen(long amount){
         System.out.println();
         Scanner scanner = new Scanner(System.in);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm aa");
@@ -184,7 +189,7 @@ public class Main {
 
     }
 
-    public static void fundTransferScreen(){
+    public void fundTransferScreen(){
         System.out.println();
         String inputDestAccount = getFundTransferValue(ATMConstant.DESTINATION_ACCOUNT_FIELD_NAME.getValue());
         String inputTrfAmount = getFundTransferValue(ATMConstant.TRANSFER_AMOUNT_FIELD_NAME.getValue());
@@ -194,7 +199,7 @@ public class Main {
 
     }
 
-    public static String getFundTransferValue(String fieldName){
+    public String getFundTransferValue(String fieldName){
         System.out.println();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter "+fieldName+" and press enter to continue or \n" +
@@ -221,7 +226,7 @@ public class Main {
         return ref;
     }
 
-    public static void fundTransferConfirmationScreen(String destAccount, String trfAmount, long refNo){
+    public void fundTransferConfirmationScreen(String destAccount, String trfAmount, long refNo){
         System.out.println();
         System.out.print("Transfer Confirmation\n" +
                 "Destination Account : " + destAccount + "\n" +
@@ -260,17 +265,17 @@ public class Main {
     public static List<String> validateFundTransferFields(String destAccount, String trfAmount, long refNo){
         List<String> errors = new ArrayList<>();
         boolean isValidAccountNumberType = ATMUtil.validateFormat(destAccount, ATMConstant.ACCOUNT_NUMBER_TYPE_REGEX.getValue());
-        if(isValidAccountNumberType != true){
+        if(!isValidAccountNumberType){
             errors.add("Account Number should only contains numbers");
         }
 
         boolean isValidAccountNumberLength = ATMUtil.validateFormat(destAccount, ATMConstant.ACCOUNT_NUMBER_LENGTH_REGEX.getValue());
-        if(isValidAccountNumberLength != true){
+        if(!isValidAccountNumberLength){
             errors.add("Account Number should have 6 digits length");
         }
 
         boolean isValidAmount = ATMUtil.validateFormat(destAccount, ATMConstant.AMOUNT_TYPE_REGEX.getValue());
-        if(isValidAmount != true){
+        if(!isValidAmount){
             errors.add("Invalid amount");
         }
 
@@ -280,17 +285,16 @@ public class Main {
         return errors;
     }
 
-    private static void doFundTransfer(String destAccount, String trfAmount, long refNo){
+    private void doFundTransfer(String destAccount, String trfAmount, long refNo){
 
-        fundTransferService = new FundTransferServiceImpl(atmRepository);
         FundTransferRequest fundTransferRequest = new FundTransferRequest();
-        fundTransferRequest.setDestAccountNumber(Long.valueOf(destAccount));
+        fundTransferRequest.setDestAccountNumber(Long.parseLong(destAccount));
         fundTransferRequest.setSrcAccountNumber(userDetail.getAccountNumber());
         fundTransferRequest.setRefNumber(refNo);
-        fundTransferRequest.setAmount(Long.valueOf(trfAmount));
+        fundTransferRequest.setAmount(Long.parseLong(trfAmount));
 
-        ATMSimulationResult<Object> fundTransferResponse = fundTransferService.execute(fundTransferRequest);
-        if(fundTransferResponse.isSuccess() != true){
+        ATMSimulationResult<Transactionable> fundTransferResponse = fundTransferService.execute(fundTransferRequest);
+        if(!fundTransferResponse.isSuccess()){
             System.out.println(fundTransferResponse.getErrorContext().getErrorMessage());
             System.out.println();
             fundTransferScreen();
@@ -301,7 +305,7 @@ public class Main {
         }
     }
 
-    public static void summaryFunTransfer(String acc, String amount, long ref) {
+    public void summaryFunTransfer(String acc, String amount, long ref) {
         Scanner scanner = new Scanner(System.in);
         System.out.println();
         System.out.print("Fund Transfer Summary\n" +

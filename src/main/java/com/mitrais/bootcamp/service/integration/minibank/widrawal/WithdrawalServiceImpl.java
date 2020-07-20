@@ -25,8 +25,8 @@ public class WithdrawalServiceImpl implements Transaction {
     }
 
     @Override
-    public ATMSimulationResult<Object> execute(BaseTransactionRequest request) {
-        ATMSimulationResult<Object> result = new ATMSimulationResult<>();
+    public ATMSimulationResult<Transactionable> execute(BaseTransactionRequest request) {
+        ATMSimulationResult<Transactionable> result = new ATMSimulationResult<>();
         WithdrawalRequest withdrawalRequest = (WithdrawalRequest) request;
 
         ServiceTemplate.execute(result, new ServiceCallback() {

@@ -18,4 +18,6 @@ public class BaseTransactionRequest {
     public void setAmount(long amount) {
         this.amount = amount;
     }
+
+
 }

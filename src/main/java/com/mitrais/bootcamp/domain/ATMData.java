@@ -8,7 +8,7 @@ package com.mitrais.bootcamp.domain;
  * @author Aji Atin Mulyadi
  * @version $Id: ATMData.java, v 0.1 2020‐07‐06 15:01 Aji Atin Mulyadi Exp $$
  */
-public class ATMData {
+public class ATMData implements Transactionable {
 
     private String name;
     private String pin;

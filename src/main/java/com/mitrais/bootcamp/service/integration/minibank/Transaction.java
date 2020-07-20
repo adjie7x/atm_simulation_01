@@ -4,8 +4,10 @@
  */
 package com.mitrais.bootcamp.service.integration.minibank;
 
+import com.mitrais.bootcamp.domain.ATMData;
 import com.mitrais.bootcamp.domain.ATMSimulationResult;
 import com.mitrais.bootcamp.domain.BaseTransactionRequest;
+import com.mitrais.bootcamp.domain.Transactionable;
 
 /**
  * @author Aji Atin Mulyadi
@@ -13,5 +15,5 @@ import com.mitrais.bootcamp.domain.BaseTransactionRequest;
  */
 public interface Transaction {
 
-    ATMSimulationResult<Object> execute(BaseTransactionRequest request);
+    ATMSimulationResult<Transactionable> execute(BaseTransactionRequest request);
 }

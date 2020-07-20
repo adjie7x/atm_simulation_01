@@ -8,7 +8,7 @@ package com.mitrais.bootcamp.domain;
  * @author Aji Atin Mulyadi
  * @version $Id: FundTransferResponse.java, v 0.1 2020‐07‐16 17:13 Aji Atin Mulyadi Exp $$
  */
-public class FundTransferResponse {
+public class FundTransferResponse implements Transactionable {
 
     private ATMData srcAccount;
     private ATMData destAccount;
