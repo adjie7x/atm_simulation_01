@@ -19,8 +19,4 @@ public class ATMSimulationException extends RuntimeException {
     public ErrorContext getErrorContext() {
         return errorContext;
     }
-
-    public void setErrorContext(ErrorContext errorContext) {
-        this.errorContext = errorContext;
-    }
 }

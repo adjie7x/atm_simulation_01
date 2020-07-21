@@ -4,7 +4,6 @@
  */
 package com.mitrais.bootcamp.service.integration.minibank;
 
-import com.mitrais.bootcamp.domain.ATMData;
 import com.mitrais.bootcamp.domain.ATMSimulationResult;
 import com.mitrais.bootcamp.domain.BaseTransactionRequest;
 import com.mitrais.bootcamp.domain.Transactionable;

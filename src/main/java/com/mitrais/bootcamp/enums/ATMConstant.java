@@ -11,7 +11,7 @@ package com.mitrais.bootcamp.enums;
 public enum ATMConstant {
 
     ACCOUNT_NUMBER_TYPE_REGEX ("\\d+"),
-    ACCOUNT_NUMBER_LENGTH_REGEX ("\\d+"),
+    ACCOUNT_NUMBER_LENGTH_REGEX ("\\d{6}"),
     PIN_TYPE_REGEX ("\\d+"),
     PIN_LENGTH_REGEX ("\\d{6}"),
     AMOUNT_TYPE_REGEX ("\\d+"),
