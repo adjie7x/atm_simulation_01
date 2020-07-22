@@ -4,9 +4,7 @@
  */
 package com.mitrais.bootcamp.view.screen.impl;
 
-import com.mitrais.bootcamp.domain.ATMSimulationResult;
-import com.mitrais.bootcamp.domain.ScreenResponseData;
-import com.mitrais.bootcamp.domain.TransactionScreenDataResponse;
+import com.mitrais.bootcamp.domain.*;
 import com.mitrais.bootcamp.enums.ScreenCode;
 import com.mitrais.bootcamp.view.screen.Screen;
 
@@ -19,12 +17,11 @@ import java.util.Scanner;
 public class TransactionScreenImpl implements Screen {
 
     @Override
-    public ATMSimulationResult<ScreenResponseData> renderScreen() {
+    public ATMSimulationResult<BaseScreenResponseData> renderScreen(ScreenRequestData requestData) {
 
-        ATMSimulationResult<ScreenResponseData> response;
+        ATMSimulationResult<BaseScreenResponseData> response;
         response = new ATMSimulationResult<>();
         TransactionScreenDataResponse screenDataResponse = new TransactionScreenDataResponse();
-        System.out.println();
         Scanner scanner = new Scanner(System.in);
         try {
             System.out.print("1. Withdraw\n2. Fund Transfer\n3. Exit\nPlease choose option[3]:");

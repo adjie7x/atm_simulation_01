@@ -31,8 +31,8 @@ public class WelcomeScreenImpl implements Screen {
     }
 
     @Override
-    public ATMSimulationResult<ScreenResponseData> renderScreen() {
-        ATMSimulationResult<ScreenResponseData> response = new ATMSimulationResult<>();
+    public ATMSimulationResult<BaseScreenResponseData> renderScreen(ScreenRequestData requestData) {
+        ATMSimulationResult<BaseScreenResponseData> response = new ATMSimulationResult<>();
 
         renderfield(WelcomeScreenField.ACOUNT_NUMBER);
         renderfield(WelcomeScreenField.PIN);
@@ -45,13 +45,13 @@ public class WelcomeScreenImpl implements Screen {
 
         if(dataList.size() > 0){
             response.setSuccess(true);
-            WelcomeScreenDataResponse welcomeScreenDataResponse = new WelcomeScreenDataResponse(dataList.get(0));
+            WelcomeScreenDataResponse welcomeScreenDataResponse = new WelcomeScreenDataResponse();
+            welcomeScreenDataResponse.setUserDetail(dataList.get(0));
             welcomeScreenDataResponse.setScreenCode(ScreenCode.TRANSACTION_SCREEN);
             response.setObject(welcomeScreenDataResponse);
         }else{
             response.setErrorContext(new ErrorContext("01", "Invalid Account Number/PIN"));
         }
-
 
         return response;
     }

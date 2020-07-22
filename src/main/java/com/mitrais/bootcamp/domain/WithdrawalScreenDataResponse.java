@@ -6,10 +6,9 @@ package com.mitrais.bootcamp.domain;
 
 /**
  * @author Aji Atin Mulyadi
- * @version $Id: WelcomeScreenDataResponse.java, v 0.1 2020‐07‐22 11:17 Aji Atin Mulyadi Exp $$
+ * @version $Id: WithdrawalScreenDataResponse.java, v 0.1 2020‐07‐22 14:48 Aji Atin Mulyadi Exp $$
  */
-public class WelcomeScreenDataResponse extends BaseScreenResponseData {
-
+public class WithdrawalScreenDataResponse extends BaseScreenResponseData {
     private ATMData userDetail;
 
     public ATMData getUserDetail() {

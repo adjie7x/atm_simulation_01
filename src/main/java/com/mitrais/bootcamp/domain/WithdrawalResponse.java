@@ -10,17 +10,13 @@ package com.mitrais.bootcamp.domain;
  */
 public class WithdrawalResponse implements Transactionable {
 
-    private ATMData atmData;
+    private ATMData userDetail;
 
-    public WithdrawalResponse(ATMData atmData) {
-        this.atmData = atmData;
+    public ATMData getUserDetail() {
+        return userDetail;
     }
 
-    public ATMData getAtmData() {
-        return atmData;
-    }
-
-    public void setAtmData(ATMData atmData) {
-        this.atmData = atmData;
+    public void setUserDetail(ATMData userDetail) {
+        this.userDetail = userDetail;
     }
 }

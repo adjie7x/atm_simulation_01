@@ -5,7 +5,8 @@
 package com.mitrais.bootcamp.view.screen;
 
 import com.mitrais.bootcamp.domain.ATMSimulationResult;
-import com.mitrais.bootcamp.domain.ScreenResponseData;
+import com.mitrais.bootcamp.domain.BaseScreenResponseData;
+import com.mitrais.bootcamp.domain.ScreenRequestData;
 
 /**
  * @author Aji Atin Mulyadi
@@ -13,5 +14,5 @@ import com.mitrais.bootcamp.domain.ScreenResponseData;
  */
 public interface Screen {
 
-    ATMSimulationResult<ScreenResponseData> renderScreen();
+    ATMSimulationResult<BaseScreenResponseData> renderScreen(ScreenRequestData requestData);
 }
