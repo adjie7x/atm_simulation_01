@@ -69,8 +69,10 @@ public class WithdrawalServiceImpl implements Transaction {
                 dataList = atmRepository.getDataByAccountNumber(condition);
                 userDetail = dataList.get(0);
 
+                Transactionable withdrawalResponse = new WithdrawalResponse(userDetail);
+
                 result.setSuccess(true);
-                result.setObject(userDetail);
+                result.setObject(withdrawalResponse);
 
             }
         });

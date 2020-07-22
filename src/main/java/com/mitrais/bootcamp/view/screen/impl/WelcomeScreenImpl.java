@@ -4,10 +4,9 @@
  */
 package com.mitrais.bootcamp.view.screen.impl;
 
-import com.mitrais.bootcamp.domain.ATMData;
-import com.mitrais.bootcamp.domain.ATMSimulationResult;
-import com.mitrais.bootcamp.domain.ErrorContext;
+import com.mitrais.bootcamp.domain.*;
 import com.mitrais.bootcamp.enums.ATMConstant;
+import com.mitrais.bootcamp.enums.ScreenCode;
 import com.mitrais.bootcamp.enums.WelcomeScreenField;
 import com.mitrais.bootcamp.repository.ATMRepository;
 import com.mitrais.bootcamp.util.ATMUtil;
@@ -32,21 +31,23 @@ public class WelcomeScreenImpl implements Screen {
     }
 
     @Override
-    public ATMSimulationResult<Object> renderScreen() {
-        ATMSimulationResult<Object> response = new ATMSimulationResult<>();
+    public ATMSimulationResult<ScreenResponseData> renderScreen() {
+        ATMSimulationResult<ScreenResponseData> response = new ATMSimulationResult<>();
 
         renderfield(WelcomeScreenField.ACOUNT_NUMBER);
         renderfield(WelcomeScreenField.PIN);
 
         ATMData condition = new ATMData();
-        condition.setAccountNumber(Long.valueOf(fieldValueMap.get(WelcomeScreenField.ACOUNT_NUMBER.getFieldCode())));
+        condition.setAccountNumber(Long.parseLong(fieldValueMap.get(WelcomeScreenField.ACOUNT_NUMBER.getFieldCode())));
         condition.setPin(fieldValueMap.get(WelcomeScreenField.PIN.getFieldCode()));
 
         List<ATMData> dataList = atmRepository.getLoginInfo(condition);
 
         if(dataList.size() > 0){
             response.setSuccess(true);
-            response.setObject(dataList.get(0));
+            WelcomeScreenDataResponse welcomeScreenDataResponse = new WelcomeScreenDataResponse(dataList.get(0));
+            welcomeScreenDataResponse.setScreenCode(ScreenCode.TRANSACTION_SCREEN);
+            response.setObject(welcomeScreenDataResponse);
         }else{
             response.setErrorContext(new ErrorContext("01", "Invalid Account Number/PIN"));
         }
@@ -72,14 +73,14 @@ public class WelcomeScreenImpl implements Screen {
 
     private void validateAccountNumber(WelcomeScreenField field){
         boolean isValidAccountNumberType = ATMUtil.validateFormat(input, ATMConstant.ACCOUNT_NUMBER_TYPE_REGEX.getValue());
-        if(isValidAccountNumberType != true){
+        if(!isValidAccountNumberType){
             System.out.println("Account Number should only contains numbers");
             System.out.println();
             renderfield(field);
         }
 
         boolean isValidAccountNumberLength = ATMUtil.validateFormat(input, ATMConstant.ACCOUNT_NUMBER_LENGTH_REGEX.getValue());
-        if(isValidAccountNumberLength != true){
+        if(!isValidAccountNumberLength){
             System.out.println("Account Number should have 6 digits length");
             System.out.println();
             renderfield(field);

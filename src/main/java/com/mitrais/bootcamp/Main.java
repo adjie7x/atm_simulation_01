@@ -6,6 +6,7 @@ package com.mitrais.bootcamp;
 
 import com.mitrais.bootcamp.domain.*;
 import com.mitrais.bootcamp.enums.ATMConstant;
+import com.mitrais.bootcamp.enums.ScreenCode;
 import com.mitrais.bootcamp.enums.WithdrawalType;
 import com.mitrais.bootcamp.repository.ATMRepository;
 import com.mitrais.bootcamp.service.integration.minibank.Transaction;
@@ -13,6 +14,7 @@ import com.mitrais.bootcamp.service.integration.minibank.fundtransfer.FundTransf
 import com.mitrais.bootcamp.service.integration.minibank.widrawal.WithdrawalServiceImpl;
 import com.mitrais.bootcamp.util.ATMUtil;
 import com.mitrais.bootcamp.view.screen.Screen;
+import com.mitrais.bootcamp.view.screen.impl.TransactionScreenImpl;
 import com.mitrais.bootcamp.view.screen.impl.WelcomeScreenImpl;
 
 import java.text.SimpleDateFormat;
@@ -28,34 +30,38 @@ import java.util.Scanner;
 public class Main {
 
     private Screen welcomeScreen;
+    private Screen transactionScreen;
     private Transaction withdrawalService;
     private Transaction fundTransferService;
     private ATMData userDetail;
 
-    public Main(Transaction withdrawalService, Transaction fundTransferService, Screen welcomeScreen) {
+    public Main(Transaction withdrawalService, Transaction fundTransferService, Screen welcomeScreen, Screen transactionScreen) {
         this.withdrawalService = withdrawalService;
         this.fundTransferService = fundTransferService;
         this.welcomeScreen = welcomeScreen;
+        this.transactionScreen = transactionScreen;
     }
 
     public static void main(String[] args) {
         ATMRepository atmRepository = new ATMRepository();
         Screen welcomeScreen = new WelcomeScreenImpl(atmRepository);
+        Screen transactionScreen = new TransactionScreenImpl();
         Transaction fundTransferService = new FundTransferServiceImpl(atmRepository);
         Transaction withdrawalService = new WithdrawalServiceImpl(atmRepository);
-        Main main = new Main(withdrawalService, fundTransferService, welcomeScreen);
+        Main main = new Main(withdrawalService, fundTransferService, welcomeScreen, transactionScreen);
         main.welcomeScreen();
 
     }
 
     public void welcomeScreen(){
-
         System.out.println();
-
-        ATMSimulationResult<Object> welcomeScreenResponse = welcomeScreen.renderScreen();
+        ATMSimulationResult<ScreenResponseData> welcomeScreenResponse = welcomeScreen.renderScreen();
         if(welcomeScreenResponse.isSuccess()){
-            userDetail = (ATMData) welcomeScreenResponse.getObject();
-            transactionScreen();
+            WelcomeScreenDataResponse dataResponse = (WelcomeScreenDataResponse) welcomeScreenResponse.getObject();
+            userDetail = dataResponse.getUserDetail();
+            if(ScreenCode.TRANSACTION_SCREEN == dataResponse.getScreenCode()){
+                transactionScreen();
+            }
         }else {
             System.out.println(welcomeScreenResponse.getErrorContext().getErrorMessage());
             welcomeScreen();
@@ -64,28 +70,20 @@ public class Main {
 
     public void transactionScreen(){
         System.out.println();
-        Scanner scanner = new Scanner(System.in);
-        try {
-            System.out.print("1. Withdraw\n2. Fund Transfer\n3. Exit\nPlease choose option[3]:");
-            String opt = scanner.nextLine();
-            if (opt.isEmpty()) {
-                welcomeScreen();
-            } else {
-                int option = Integer.parseInt(opt);
-                if (option == 1) {
-                    withdrawScreen();
-                } else if (option == 2) {
-                    fundTransferScreen();
-                } else if (option == 3){
-                    welcomeScreen();
-                } else {
-                    transactionScreen();
-                }
+        ATMSimulationResult<ScreenResponseData> transactionScreenResponse = transactionScreen.renderScreen();
+        if(transactionScreenResponse.isSuccess()){
+            TransactionScreenDataResponse dataResponse = (TransactionScreenDataResponse) transactionScreenResponse.getObject();
+            if(ScreenCode.TRANSACTION_SCREEN == dataResponse.getScreenCode()){
+                transactionScreen();
+            } else if(ScreenCode.FUNDTRANSFER_SCREEN == dataResponse.getScreenCode()){
+                fundTransferScreen();
+            }else if(ScreenCode.WITHDRAWAL_SCREEN == dataResponse.getScreenCode()) {
+                withdrawScreen();
             }
-        } catch (Exception e) {
-            transactionScreen();
+        }else {
+            System.out.println(transactionScreenResponse.getErrorContext().getErrorMessage());
+            welcomeScreen();
         }
-
     }
 
     public void withdrawScreen(){
