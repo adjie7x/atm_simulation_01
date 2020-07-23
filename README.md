@@ -16,3 +16,10 @@ after all requirements are ready, follow below steps :
 2. go to folder target in this project and run this the jar file, here is the command :
    java -jar atm_simulation_01-1.0-SNAPSHOT.jar
 3. you will see account number field on the console.
+## DATA
+Authenticate by using account and pin number below
+
+| Account Number | PIN    | Name        | Balance |
+| -------------- | ------ | ----------- | ------- |
+| 112233         | 012108 | John Doe    | $100    |
+| 112244         | 932012 | Jane Doe    | $30     |
