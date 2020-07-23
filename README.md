@@ -2,12 +2,11 @@
 CLI study case project to simulate various ATM features, such as Withdrawal and Fund Transfer. 
 
 ## Overview
-this study case project is created to make knownledge about SOLID Principle and OOP become Good
+this study case project is created to make knownledge about SOLID Principle and OOP better
 
 ## atm_simulation_01
 it is implementing SOLID Principle using CLI as input channel.
 to run this project there are have some requirements stack that should be prepared :
-- Maven
 - apache-maven-3.0.5 or other highest version
 - Java 1.8
 - Intelij IDEA or other IDEA
