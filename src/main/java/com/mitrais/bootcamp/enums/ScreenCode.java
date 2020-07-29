@@ -13,7 +13,8 @@ public enum ScreenCode {
     WELCOME_SCREEN ("WCO_SCR", "Welcome Screen"),
     TRANSACTION_SCREEN ("TRX_SCR", "Transaction Screen"),
     FUNDTRANSFER_SCREEN ("FUND_SCR", "Fund Transfer Screen"),
-    WITHDRAWAL_SCREEN ("WDW_SCR", "Withdrawal Screen")
+    WITHDRAWAL_SCREEN ("WDW_SCR", "Withdrawal Screen"),
+    HISTORY_SCREEN ("HST_SCR", "Transaction History Screen")
     ;
 
     private String screenCode;
