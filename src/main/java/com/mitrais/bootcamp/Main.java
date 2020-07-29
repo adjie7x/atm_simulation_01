@@ -26,7 +26,7 @@ public class Main {
     private Screen transactionScreen;
     private Screen withdrawalScreen;
     private Screen fundTransferScreen;
-    private ATMData userDetail;
+    private Account userDetail;
 
     public Main(Screen welcomeScreen, Screen transactionScreen,
                 Screen withdrawalScreen, Screen fundTransferScreen) {

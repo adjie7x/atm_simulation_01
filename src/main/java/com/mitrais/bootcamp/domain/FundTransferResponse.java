@@ -10,22 +10,22 @@ package com.mitrais.bootcamp.domain;
  */
 public class FundTransferResponse implements Transactionable {
 
-    private ATMData srcAccount;
-    private ATMData destAccount;
+    private Account srcAccount;
+    private Account destAccount;
 
-    public ATMData getSrcAccount() {
+    public Account getSrcAccount() {
         return srcAccount;
     }
 
-    public void setSrcAccount(ATMData srcAccount) {
+    public void setSrcAccount(Account srcAccount) {
         this.srcAccount = srcAccount;
     }
 
-    public ATMData getDestAccount() {
+    public Account getDestAccount() {
         return destAccount;
     }
 
-    public void setDestAccount(ATMData destAccount) {
+    public void setDestAccount(Account destAccount) {
         this.destAccount = destAccount;
     }
 }

@@ -1,6 +1,6 @@
 package com.mitrais.bootcamp.repository;
 
-import com.mitrais.bootcamp.domain.ATMData;
+import com.mitrais.bootcamp.domain.Account;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,36 +11,36 @@ import java.util.List;
  */
 public class ATMRepository {
 
-    private static List<ATMData> dataList = new ArrayList<ATMData>();
+    private static List<Account> dataList = new ArrayList<Account>();
     static {
-        ATMData atmData1 = new ATMData();
-        atmData1.setName("John Doe");
-        atmData1.setAccountNumber(112233);
-        atmData1.setPin("012108");
-        atmData1.setBalance(100);
+        Account account1 = new Account();
+        account1.setName("John Doe");
+        account1.setAccountNumber(112233);
+        account1.setPin("012108");
+        account1.setBalance(100);
 
-        ATMData atmData2 = new ATMData();
-        atmData2.setName("Jane Doe");
-        atmData2.setAccountNumber(112244);
-        atmData2.setPin("932012");
-        atmData2.setBalance(30);
+        Account account2 = new Account();
+        account2.setName("Jane Doe");
+        account2.setAccountNumber(112244);
+        account2.setPin("932012");
+        account2.setBalance(30);
 
-        dataList.add(atmData1);
-        dataList.add(atmData2);
+        dataList.add(account1);
+        dataList.add(account2);
     }
 
-    public List<ATMData> getATMDataList(){
+    public List<Account> getATMDataList(){
         return dataList;
     }
 
-    public ATMData getLoginInfo(final ATMData data) {
+    public Account getLoginInfo(final Account data) {
         return dataList.stream()
                 .filter(c -> c.getAccountNumber() == data.getAccountNumber() && c.getPin().equalsIgnoreCase(data.getPin()))
 //                .findFirst().orElseThrow(() -> new ATMSimulationException(new ErrorContext("invalid", "data not found")));
                 .findFirst().orElse(null);
     }
 
-    public ATMData getDataByAccountNumber(final long accountNumber) {
+    public Account getDataByAccountNumber(final long accountNumber) {
         //                .findFirst().orElse(null);
         return dataList.stream()
                 .filter(c -> c.getAccountNumber() == accountNumber)
@@ -48,11 +48,11 @@ public class ATMRepository {
                 .findFirst().orElse(null);
     }
 
-    public ATMData deductBalance(long accountNumber, long amount){
+    public Account deductBalance(long accountNumber, long amount){
 
         int index = -1;
 
-        for (ATMData data : dataList) {
+        for (Account data : dataList) {
             if (data.getAccountNumber() == accountNumber) {
                 index = dataList.indexOf(data);
                 break;
@@ -67,11 +67,11 @@ public class ATMRepository {
         return null;
     }
 
-    public ATMData increaseBalance(long accountNumber, long amount){
+    public Account increaseBalance(long accountNumber, long amount){
 
         int index = -1;
 
-        for (ATMData data : dataList) {
+        for (Account data : dataList) {
             if (data.getAccountNumber() == accountNumber) {
                 index = dataList.indexOf(data);
                 break;

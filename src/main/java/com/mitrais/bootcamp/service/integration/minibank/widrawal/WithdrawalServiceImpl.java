@@ -51,7 +51,7 @@ public class WithdrawalServiceImpl implements Transaction {
             @Override
             public void process() {
 
-                ATMData userDetail = atmRepository.getDataByAccountNumber(withdrawalRequest.getAccountNumber());
+                Account userDetail = atmRepository.getDataByAccountNumber(withdrawalRequest.getAccountNumber());
 
                 long userBalance = userDetail.getBalance();
                 long accountNumber = userDetail.getAccountNumber();

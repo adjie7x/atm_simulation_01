@@ -4,7 +4,7 @@
  */
 package com.mitrais.bootcamp.service.integration.user.impl;
 
-import com.mitrais.bootcamp.domain.ATMData;
+import com.mitrais.bootcamp.domain.Account;
 import com.mitrais.bootcamp.repository.ATMRepository;
 import com.mitrais.bootcamp.service.integration.user.UserService;
 
@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean validateUser(ATMData condition) {
-        List<ATMData> dataList = atmRepository.getATMDataList();
+    public boolean validateUser(Account condition) {
+        List<Account> dataList = atmRepository.getATMDataList();
         return dataList.size() > 0 ? true : false;
     }
 }

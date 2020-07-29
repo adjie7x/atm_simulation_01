@@ -10,13 +10,13 @@ package com.mitrais.bootcamp.domain;
  */
 public class WelcomeScreenDataResponse extends BaseScreenResponseData {
 
-    private ATMData userDetail;
+    private Account userDetail;
 
-    public ATMData getUserDetail() {
+    public Account getUserDetail() {
         return userDetail;
     }
 
-    public void setUserDetail(ATMData userDetail) {
+    public void setUserDetail(Account userDetail) {
         this.userDetail = userDetail;
     }
 }

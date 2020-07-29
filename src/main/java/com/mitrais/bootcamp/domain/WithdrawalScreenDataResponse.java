@@ -9,13 +9,13 @@ package com.mitrais.bootcamp.domain;
  * @version $Id: WithdrawalScreenDataResponse.java, v 0.1 2020‐07‐22 14:48 Aji Atin Mulyadi Exp $$
  */
 public class WithdrawalScreenDataResponse extends BaseScreenResponseData {
-    private ATMData userDetail;
+    private Account userDetail;
 
-    public ATMData getUserDetail() {
+    public Account getUserDetail() {
         return userDetail;
     }
 
-    public void setUserDetail(ATMData userDetail) {
+    public void setUserDetail(Account userDetail) {
         this.userDetail = userDetail;
     }
 }

@@ -34,11 +34,11 @@ public class WelcomeScreenImpl implements Screen {
         String pin;
         do pin = readField(WelcomeScreenField.PIN); while (StringUtils.isBlank(pin));
 
-        ATMData condition = new ATMData();
+        Account condition = new Account();
         condition.setAccountNumber(Long.parseLong(accountNumber));
         condition.setPin(pin);
 
-        ATMData userDetail = atmRepository.getLoginInfo(condition);
+        Account userDetail = atmRepository.getLoginInfo(condition);
 
         if(userDetail != null){
             response.setSuccess(true);

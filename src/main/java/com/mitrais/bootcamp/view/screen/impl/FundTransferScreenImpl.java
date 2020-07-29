@@ -22,7 +22,7 @@ import java.util.Scanner;
 public class FundTransferScreenImpl implements Screen {
 
     private Transaction fundTransferService;
-    private ATMData userDetail;
+    private Account userDetail;
     private FundTransferScreenDataResponse screenDataResponse;
 
     public FundTransferScreenImpl(Transaction fundTransferService) {

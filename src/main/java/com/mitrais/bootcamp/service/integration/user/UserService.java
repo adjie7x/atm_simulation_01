@@ -4,7 +4,7 @@
  */
 package com.mitrais.bootcamp.service.integration.user;
 
-import com.mitrais.bootcamp.domain.ATMData;
+import com.mitrais.bootcamp.domain.Account;
 
 /**
  * @author Aji Atin Mulyadi
@@ -12,5 +12,5 @@ import com.mitrais.bootcamp.domain.ATMData;
  */
 public interface UserService {
 
-    boolean validateUser(ATMData condition);
+    boolean validateUser(Account condition);
 }

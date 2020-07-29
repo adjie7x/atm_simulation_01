@@ -9,13 +9,13 @@ package com.mitrais.bootcamp.domain;
  * @version $Id: FundTransferScreenDataRequest.java, v 0.1 2020‐07‐22 20:40 Aji Atin Mulyadi Exp $$
  */
 public class FundTransferScreenDataRequest implements ScreenRequestData {
-    private ATMData userDetail;
+    private Account userDetail;
 
-    public ATMData getUserDetail() {
+    public Account getUserDetail() {
         return userDetail;
     }
 
-    public void setUserDetail(ATMData userDetail) {
+    public void setUserDetail(Account userDetail) {
         this.userDetail = userDetail;
     }
 }

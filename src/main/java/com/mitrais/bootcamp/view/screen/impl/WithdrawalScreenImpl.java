@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class WithdrawalScreenImpl implements Screen {
 
     private Transaction withdrawalService;
-    private ATMData userDetail;
+    private Account userDetail;
     private WithdrawalScreenDataResponse screenDataResponse;
 
     public WithdrawalScreenImpl(Transaction withdrawalService) {

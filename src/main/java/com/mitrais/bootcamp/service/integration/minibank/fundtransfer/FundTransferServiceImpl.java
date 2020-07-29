@@ -42,15 +42,15 @@ public class FundTransferServiceImpl implements Transaction {
             @Override
             public void process() {
 
-                ATMData srcAccount = atmRepository.getDataByAccountNumber(fundTransferRequest.getSrcAccountNumber());
-                ATMData destAccount = atmRepository.getDataByAccountNumber(fundTransferRequest.getDestAccountNumber());
+                Account srcAccount = atmRepository.getDataByAccountNumber(fundTransferRequest.getSrcAccountNumber());
+                Account destAccount = atmRepository.getDataByAccountNumber(fundTransferRequest.getDestAccountNumber());
 
                 if(srcAccount.getBalance() < fundTransferRequest.getAmount()){
                     throw new ATMSimulationException(new ErrorContext("insufficient", "Insufficient balance $"+srcAccount.getBalance()));
                 }
 
-                ATMData currentSrcData = atmRepository.deductBalance(srcAccount.getAccountNumber(), fundTransferRequest.getAmount());
-                ATMData currentDestData = atmRepository.increaseBalance(destAccount.getAccountNumber(), fundTransferRequest.getAmount());
+                Account currentSrcData = atmRepository.deductBalance(srcAccount.getAccountNumber(), fundTransferRequest.getAmount());
+                Account currentDestData = atmRepository.increaseBalance(destAccount.getAccountNumber(), fundTransferRequest.getAmount());
 
                 FundTransferResponse fundTransferResponse = new FundTransferResponse();
                 fundTransferResponse.setSrcAccount(currentSrcData);
