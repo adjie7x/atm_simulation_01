@@ -5,10 +5,15 @@
 package com.mitrais.bootcamp.service.integration.minibank.fundtransfer;
 
 import com.mitrais.bootcamp.domain.*;
+import com.mitrais.bootcamp.enums.MutationType;
+import com.mitrais.bootcamp.enums.TransactionType;
 import com.mitrais.bootcamp.repository.ATMRepository;
+import com.mitrais.bootcamp.repository.TransactionRepository;
 import com.mitrais.bootcamp.service.base.ServiceCallback;
 import com.mitrais.bootcamp.service.base.ServiceTemplate;
 import com.mitrais.bootcamp.service.integration.minibank.Transaction;
+
+import java.time.LocalDateTime;
 
 /**
  * @author Aji Atin Mulyadi
@@ -17,9 +22,11 @@ import com.mitrais.bootcamp.service.integration.minibank.Transaction;
 public class FundTransferServiceImpl implements Transaction {
 
     ATMRepository atmRepository;
+    TransactionRepository transactionRepository;
 
-    public FundTransferServiceImpl(ATMRepository atmRepository) {
+    public FundTransferServiceImpl(ATMRepository atmRepository, TransactionRepository transactionRepository) {
         this.atmRepository = atmRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
@@ -51,6 +58,8 @@ public class FundTransferServiceImpl implements Transaction {
 
                 Account currentSrcData = atmRepository.deductBalance(srcAccount.getAccountNumber(), fundTransferRequest.getAmount());
                 Account currentDestData = atmRepository.increaseBalance(destAccount.getAccountNumber(), fundTransferRequest.getAmount());
+
+                transactionRepository.addNew(new TransactionDTO(currentSrcData, currentDestData, fundTransferRequest.getAmount(), LocalDateTime.now(), MutationType.DEBIT, TransactionType.FUND_TRANSFER));
 
                 FundTransferResponse fundTransferResponse = new FundTransferResponse();
                 fundTransferResponse.setSrcAccount(currentSrcData);

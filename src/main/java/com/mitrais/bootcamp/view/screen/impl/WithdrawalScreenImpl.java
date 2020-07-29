@@ -23,6 +23,9 @@ public class WithdrawalScreenImpl implements Screen {
     private Transaction withdrawalService;
     private Account userDetail;
     private WithdrawalScreenDataResponse screenDataResponse;
+    private final long TEN = 10;
+    private final long FIFTY = 50;
+    private final long HUNDRED = 100;
 
     public WithdrawalScreenImpl(Transaction withdrawalService) {
         this.withdrawalService = withdrawalService;
@@ -49,19 +52,15 @@ public class WithdrawalScreenImpl implements Screen {
                 if (option < 1 || option >= 5) {
                     screenDataResponse.setScreenCode(ScreenCode.TRANSACTION_SCREEN);
                 } else if(option <= 3){
-                    long withdrawalAmount;
                     switch (option) {
                         case 1:
-                            withdrawalAmount = 10;
-                            doWithdrawal(WithdrawalType.COMMON, withdrawalAmount);
+                            doWithdrawal(WithdrawalType.COMMON, TEN);
                             break;
                         case 2:
-                            withdrawalAmount = 50;
-                            doWithdrawal(WithdrawalType.COMMON, withdrawalAmount);
+                            doWithdrawal(WithdrawalType.COMMON, FIFTY);
                             break;
                         case 3:
-                            withdrawalAmount = 100;
-                            doWithdrawal(WithdrawalType.COMMON, withdrawalAmount);
+                            doWithdrawal(WithdrawalType.COMMON, HUNDRED);
                             break;
                     }
 

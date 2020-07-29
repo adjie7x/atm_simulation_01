@@ -4,17 +4,9 @@
  */
 package com.mitrais.bootcamp;
 
-import com.mitrais.bootcamp.domain.*;
-import com.mitrais.bootcamp.enums.ScreenCode;
+import com.mitrais.bootcamp.domain.ATMSimulationException;
 import com.mitrais.bootcamp.repository.ATMRepository;
-import com.mitrais.bootcamp.service.integration.minibank.Transaction;
-import com.mitrais.bootcamp.service.integration.minibank.fundtransfer.FundTransferServiceImpl;
-import com.mitrais.bootcamp.service.integration.minibank.widrawal.WithdrawalServiceImpl;
-import com.mitrais.bootcamp.view.screen.Screen;
-import com.mitrais.bootcamp.view.screen.impl.FundTransferScreenImpl;
-import com.mitrais.bootcamp.view.screen.impl.TransactionScreenImpl;
-import com.mitrais.bootcamp.view.screen.impl.WelcomeScreenImpl;
-import com.mitrais.bootcamp.view.screen.impl.WithdrawalScreenImpl;
+import org.apache.commons.cli.*;
 
 /**
  * @author Aji Atin Mulyadi
@@ -22,98 +14,43 @@ import com.mitrais.bootcamp.view.screen.impl.WithdrawalScreenImpl;
  */
 public class Main {
 
-    private Screen welcomeScreen;
-    private Screen transactionScreen;
-    private Screen withdrawalScreen;
-    private Screen fundTransferScreen;
-    private Account userDetail;
-
-    public Main(Screen welcomeScreen, Screen transactionScreen,
-                Screen withdrawalScreen, Screen fundTransferScreen) {
-        this.welcomeScreen = welcomeScreen;
-        this.transactionScreen = transactionScreen;
-        this.withdrawalScreen = withdrawalScreen;
-        this.fundTransferScreen = fundTransferScreen;
+    public static Option getDirectoryOption(){
+        return Option.builder("d").desc("Data source directory")
+                .longOpt("dir")
+                .type(String.class)
+                .hasArg()
+                .build();
     }
 
     public static void main(String[] args) {
-        ATMRepository atmRepository = new ATMRepository();
 
+        Options options = new Options();
+        options.addOption(getDirectoryOption());
 
-        Transaction fundTransferService = new FundTransferServiceImpl(atmRepository);
-        Transaction withdrawalService = new WithdrawalServiceImpl(atmRepository);
+        try {
+            CommandLineParser cmdParser = new DefaultParser();
+            CommandLine cmd = cmdParser.parse(options, args);
 
-        Screen welcomeScreen = new WelcomeScreenImpl(atmRepository);
-        Screen transactionScreen = new TransactionScreenImpl();
-        Screen withdrawalScreen = new WithdrawalScreenImpl(withdrawalService);
-        Screen fundTransferScreen = new FundTransferScreenImpl(fundTransferService);
+            if(cmd.hasOption("d")){
+                String path = cmd.getOptionValue("d");
+                System.out.println("account data path : "+path);
+                ATMRepository atmRepository = new ATMRepository();
+                atmRepository.loadAccountDataFromCSV(path);
+                ATMController.init(atmRepository).run();
 
-        Main main = new Main(welcomeScreen, transactionScreen, withdrawalScreen, fundTransferScreen);
-        main.welcomeScreen();
-
-    }
-
-    public void welcomeScreen(){
-        System.out.println();
-        ATMSimulationResult<BaseScreenResponseData> welcomeScreenResponse = welcomeScreen.renderScreen(null);
-        if(welcomeScreenResponse.isSuccess()){
-            WelcomeScreenDataResponse dataResponse = (WelcomeScreenDataResponse) welcomeScreenResponse.getObject();
-            userDetail = dataResponse.getUserDetail();
-        }
-
-        redirectScreen(welcomeScreenResponse);
-    }
-
-    public void transactionScreen(){
-        System.out.println();
-        ATMSimulationResult<BaseScreenResponseData> transactionScreenResponse = transactionScreen.renderScreen(null);
-
-        redirectScreen(transactionScreenResponse);
-    }
-
-    public void withdrawScreen(){
-        System.out.println();
-        WithdrawalScreenDataRequest dataRequest = new WithdrawalScreenDataRequest();
-        dataRequest.setUserDetail(userDetail);
-        ATMSimulationResult<BaseScreenResponseData> withdrawalScreenResponse = withdrawalScreen.renderScreen(dataRequest);
-        if(withdrawalScreenResponse.isSuccess()){
-            WithdrawalScreenDataResponse dataResponse = (WithdrawalScreenDataResponse) withdrawalScreenResponse.getObject();
-            userDetail = dataResponse.getUserDetail();
-        }
-
-        redirectScreen(withdrawalScreenResponse);
-    }
-
-    public void fundTransferScreen(){
-        System.out.println();
-        FundTransferScreenDataRequest dataRequest = new FundTransferScreenDataRequest();
-        dataRequest.setUserDetail(userDetail);
-        ATMSimulationResult<BaseScreenResponseData> fundTransferScreenResponse = fundTransferScreen.renderScreen(dataRequest);
-        if(fundTransferScreenResponse.isSuccess()){
-            FundTransferScreenDataResponse dataResponse = (FundTransferScreenDataResponse) fundTransferScreenResponse.getObject();
-            userDetail = dataResponse.getUserDetail();
-        }
-
-        redirectScreen(fundTransferScreenResponse);
-
-    }
-
-    public void redirectScreen(ATMSimulationResult<BaseScreenResponseData> result){
-        BaseScreenResponseData baseScreenResponseData = result.getObject();
-        if(result.isSuccess()){
-            if(ScreenCode.TRANSACTION_SCREEN == baseScreenResponseData.getScreenCode()){
-                transactionScreen();
-            } else if(ScreenCode.FUNDTRANSFER_SCREEN == baseScreenResponseData.getScreenCode()){
-                fundTransferScreen();
-            } else if(ScreenCode.WITHDRAWAL_SCREEN == baseScreenResponseData.getScreenCode()) {
-                withdrawScreen();
-            } else if(ScreenCode.WELCOME_SCREEN == baseScreenResponseData.getScreenCode()) {
-                welcomeScreen();
+            } else {
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp("java -jar atm.jar -d c:\\account.csv", options);
             }
-        }else {
-            System.out.println(result.getErrorContext().getErrorMessage());
-            welcomeScreen();
+        }catch (ParseException e){
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("java -jar atm_.jar -d c:\\account.csv", options);
+        } catch (ATMSimulationException e){
+            System.out.println(e.getErrorContext().getErrorMessage());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
+
     }
 
 }

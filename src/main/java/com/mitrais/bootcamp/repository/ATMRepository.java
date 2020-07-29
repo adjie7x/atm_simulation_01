@@ -1,9 +1,13 @@
 package com.mitrais.bootcamp.repository;
 
+import com.mitrais.bootcamp.domain.ATMSimulationException;
 import com.mitrais.bootcamp.domain.Account;
+import com.mitrais.bootcamp.util.AccountCSVParser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Aji Atin Mulyadi
@@ -85,5 +89,11 @@ public class ATMRepository {
 
         return null;
 
+    }
+
+    public void loadAccountDataFromCSV(String path) throws ATMSimulationException, IOException {
+        AccountCSVParser accountCSVParser = new AccountCSVParser();
+        dataList.addAll(accountCSVParser.parseFromCSV(path).stream().distinct().collect(Collectors.toList()));
+        System.out.println("total account : "+dataList.size());
     }
 }

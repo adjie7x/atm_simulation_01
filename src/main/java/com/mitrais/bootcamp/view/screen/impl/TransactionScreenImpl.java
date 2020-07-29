@@ -24,7 +24,7 @@ public class TransactionScreenImpl implements Screen {
         TransactionScreenDataResponse screenDataResponse = new TransactionScreenDataResponse();
         Scanner scanner = new Scanner(System.in);
         try {
-            System.out.print("1. Withdraw\n2. Fund Transfer\n3. Exit\nPlease choose option[3]:");
+            System.out.print("1. Withdraw\n2. Fund Transfer\n3. History\n4. Exit\nPlease choose option[3]:");
             String opt = scanner.nextLine();
             if (opt.isEmpty()) {
                 screenDataResponse.setScreenCode(ScreenCode.WELCOME_SCREEN);
@@ -35,6 +35,8 @@ public class TransactionScreenImpl implements Screen {
                 } else if (option == 2) {
                     screenDataResponse.setScreenCode(ScreenCode.FUNDTRANSFER_SCREEN);
                 } else if (option == 3){
+                    screenDataResponse.setScreenCode(ScreenCode.HISTORY_SCREEN);
+                } else if (option == 4){
                     screenDataResponse.setScreenCode(ScreenCode.WELCOME_SCREEN);
                 } else {
                     screenDataResponse.setScreenCode(ScreenCode.TRANSACTION_SCREEN);
