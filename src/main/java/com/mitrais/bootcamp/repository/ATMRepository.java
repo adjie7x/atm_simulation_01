@@ -1,14 +1,9 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004‐2020 All Rights Reserved.
- */
 package com.mitrais.bootcamp.repository;
 
 import com.mitrais.bootcamp.domain.ATMData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Aji Atin Mulyadi
@@ -38,18 +33,19 @@ public class ATMRepository {
         return dataList;
     }
 
-    public List<ATMData> getLoginInfo(final ATMData data){
-        List<ATMData> result = dataList.stream()
+    public ATMData getLoginInfo(final ATMData data) {
+        return dataList.stream()
                 .filter(c -> c.getAccountNumber() == data.getAccountNumber() && c.getPin().equalsIgnoreCase(data.getPin()))
-                .collect(Collectors.toList());
-        return result;
+//                .findFirst().orElseThrow(() -> new ATMSimulationException(new ErrorContext("invalid", "data not found")));
+                .findFirst().orElse(null);
     }
 
-    public List<ATMData> getDataByAccountNumber(final ATMData data){
-        List<ATMData> result = dataList.stream()
-                .filter(c -> c.getAccountNumber() == data.getAccountNumber())
-                .collect(Collectors.toList());
-        return result;
+    public ATMData getDataByAccountNumber(final long accountNumber) {
+        //                .findFirst().orElse(null);
+        return dataList.stream()
+                .filter(c -> c.getAccountNumber() == accountNumber)
+//                .findFirst().orElseThrow(() -> new ATMSimulationException(new ErrorContext("invalid","data not found")));
+                .findFirst().orElse(null);
     }
 
     public ATMData deductBalance(long accountNumber, long amount){
@@ -65,8 +61,7 @@ public class ATMRepository {
 
         if(index > -1){
             dataList.get(index).setBalance(dataList.get(index).getBalance() - amount);
-            ATMData data = dataList.get(index);
-            return data;
+            return dataList.get(index);
         }
 
         return null;
@@ -85,15 +80,10 @@ public class ATMRepository {
 
         if(index > -1){
             dataList.get(index).setBalance(dataList.get(index).getBalance() + amount);
-            ATMData data = dataList.get(index);
-            return data;
+            return dataList.get(index);
         }
 
         return null;
 
-    }
-
-    public void addData(ATMData atmData){
-        dataList.add(atmData);
     }
 }

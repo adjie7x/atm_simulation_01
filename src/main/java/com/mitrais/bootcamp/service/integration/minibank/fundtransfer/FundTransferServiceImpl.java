@@ -10,8 +10,6 @@ import com.mitrais.bootcamp.service.base.ServiceCallback;
 import com.mitrais.bootcamp.service.base.ServiceTemplate;
 import com.mitrais.bootcamp.service.integration.minibank.Transaction;
 
-import java.util.List;
-
 /**
  * @author Aji Atin Mulyadi
  * @version $Id: FundTransferServiceImpl.java, v 0.1 2020‐07‐16 14:19 Aji Atin Mulyadi Exp $$
@@ -43,25 +41,9 @@ public class FundTransferServiceImpl implements Transaction {
 
             @Override
             public void process() {
-                ATMData condition = new ATMData();
-                condition.setAccountNumber(fundTransferRequest.getSrcAccountNumber());
 
-                List<ATMData> dataList = atmRepository.getDataByAccountNumber(condition);
-
-                if(dataList.size() == 0){
-                    throw new ATMSimulationException(new ErrorContext("invalid_account", "Invalid Source Account Number"));
-                }
-
-                ATMData srcAccount = dataList.get(0);
-
-                condition.setAccountNumber(fundTransferRequest.getDestAccountNumber());
-                dataList = atmRepository.getDataByAccountNumber(condition);
-
-                if(dataList.size() == 0){
-                    throw new ATMSimulationException(new ErrorContext("invalid_account", "Invalid Destination Account Number"));
-                }
-
-                ATMData destAccount = dataList.get(0);
+                ATMData srcAccount = atmRepository.getDataByAccountNumber(fundTransferRequest.getSrcAccountNumber());
+                ATMData destAccount = atmRepository.getDataByAccountNumber(fundTransferRequest.getDestAccountNumber());
 
                 if(srcAccount.getBalance() < fundTransferRequest.getAmount()){
                     throw new ATMSimulationException(new ErrorContext("insufficient", "Insufficient balance $"+srcAccount.getBalance()));

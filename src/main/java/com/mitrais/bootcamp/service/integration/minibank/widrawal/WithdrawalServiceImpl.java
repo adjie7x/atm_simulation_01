@@ -10,8 +10,6 @@ import com.mitrais.bootcamp.service.base.ServiceCallback;
 import com.mitrais.bootcamp.service.base.ServiceTemplate;
 import com.mitrais.bootcamp.service.integration.minibank.Transaction;
 
-import java.util.List;
-
 /**
  * @author Aji Atin Mulyadi
  * @version $Id: WithdrawalServiceImpl.java, v 0.1 2020‐07‐16 9:58 Aji Atin Mulyadi Exp $$
@@ -36,6 +34,10 @@ public class WithdrawalServiceImpl implements Transaction {
                     throw new ATMSimulationException(new ErrorContext("null", "request can't be null"));
                 }
 
+                if(withdrawalRequest.getAccountNumber() == 0){
+                    throw new ATMSimulationException(new ErrorContext("invalid", "invalid account number"));
+                }
+
                 if(withdrawalRequest.getAmount() == 0 || withdrawalRequest.getAmount() % 10 != 0){
                     throw new ATMSimulationException(new ErrorContext("invalid", "Invalid ammount"));
                 }
@@ -43,20 +45,14 @@ public class WithdrawalServiceImpl implements Transaction {
                 if(withdrawalRequest.getAmount() > 1000){
                     throw new ATMSimulationException(new ErrorContext("invalid", "Maximum amount to withdraw is $1000"));
                 }
+
             }
 
             @Override
             public void process() {
-                ATMData condition = new ATMData();
-                condition.setAccountNumber(withdrawalRequest.getAccountNumber());
 
-                List<ATMData> dataList = atmRepository.getDataByAccountNumber(condition);
+                ATMData userDetail = atmRepository.getDataByAccountNumber(withdrawalRequest.getAccountNumber());
 
-                if(dataList.size() == 0){
-                    throw new ATMSimulationException(new ErrorContext("invalid_account", "Invalid Account Number"));
-                }
-
-                ATMData userDetail = dataList.get(0);
                 long userBalance = userDetail.getBalance();
                 long accountNumber = userDetail.getAccountNumber();
 
@@ -66,8 +62,7 @@ public class WithdrawalServiceImpl implements Transaction {
 
                 atmRepository.deductBalance(accountNumber, withdrawalRequest.getAmount());
 
-                dataList = atmRepository.getDataByAccountNumber(condition);
-                userDetail = dataList.get(0);
+                userDetail = atmRepository.getDataByAccountNumber(withdrawalRequest.getAccountNumber());
 
                 WithdrawalResponse withdrawalResponse = new WithdrawalResponse();
                 withdrawalResponse.setUserDetail(userDetail);
