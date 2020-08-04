@@ -4,6 +4,7 @@
  */
 package com.mitrais.bootcamp.view.screen;
 
+import com.mitrais.bootcamp.domain.ATMSimulationException;
 import com.mitrais.bootcamp.domain.ATMSimulationResult;
 import com.mitrais.bootcamp.domain.BaseScreenResponseData;
 import com.mitrais.bootcamp.domain.ScreenRequestData;
@@ -14,5 +15,5 @@ import com.mitrais.bootcamp.domain.ScreenRequestData;
  */
 public interface Screen {
 
-    ATMSimulationResult<BaseScreenResponseData> renderScreen(ScreenRequestData requestData);
+    ATMSimulationResult<BaseScreenResponseData> renderScreen(ScreenRequestData requestData) throws ATMSimulationException;
 }

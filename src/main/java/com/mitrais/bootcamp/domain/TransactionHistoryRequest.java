@@ -7,7 +7,7 @@ package com.mitrais.bootcamp.domain;
 public class TransactionHistoryRequest extends BaseTransactionRequest {
 
     private int limit;
-    private long accountNumber;
+    private String accountNumber;
 
     public int getLimit() {
         return limit;
@@ -17,11 +17,11 @@ public class TransactionHistoryRequest extends BaseTransactionRequest {
         this.limit = limit;
     }
 
-    public long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(long accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 }

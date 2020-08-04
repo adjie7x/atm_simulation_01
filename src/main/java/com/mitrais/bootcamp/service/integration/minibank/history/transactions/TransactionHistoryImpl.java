@@ -38,8 +38,9 @@ public class TransactionHistoryImpl implements Transaction {
                 TransactionHistoryResponse transactionHistoryResponse = new TransactionHistoryResponse();
 
                 List<TransactionDTO> transactions = transactionRepository.getAllTransaction().stream()
-                        .filter(trxDto -> transactionHistoryRequest.getAccountNumber() == trxDto.getSrcAccount().getAccountNumber())
+                        .filter(trxDto -> transactionHistoryRequest.getAccountNumber().equals(trxDto.getSrcAccount().getAccountNumber()))
                         .sorted(Comparator.comparing(TransactionDTO::getTransactionDate))
+                        .sorted((o1, o2) -> o2.getTransactionDate().compareTo(o1.getTransactionDate()))
                         .limit(transactionHistoryRequest.getLimit() == 0 ?10:transactionHistoryRequest.getLimit())
                         .collect(Collectors.toList());
 

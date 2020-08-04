@@ -8,12 +8,12 @@ package com.mitrais.bootcamp.domain;
  * @author Aji Atin Mulyadi
  * @version $Id: ATMData.java, v 0.1 2020‐07‐06 15:01 Aji Atin Mulyadi Exp $$
  */
-public class Account {
+public class Account implements Comparable<Account> {
 
     private String name;
     private String pin;
     private long balance;
-    private long accountNumber;
+    private String accountNumber;
 
     public String getName() {
         return name;
@@ -39,11 +39,24 @@ public class Account {
         this.balance = balance;
     }
 
-    public long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(long accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    @Override
+    public int compareTo(Account o) {
+        return this.getAccountNumber().compareTo(o.getAccountNumber());
+    }
+
+    public void deduct(long amount) {
+        this.balance = this.balance - amount;
+    }
+
+    public void increase(long amount) {
+        this.balance = this.balance + amount;
     }
 }

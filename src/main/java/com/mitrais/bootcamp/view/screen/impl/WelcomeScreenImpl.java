@@ -25,7 +25,7 @@ public class WelcomeScreenImpl implements Screen {
     }
 
     @Override
-    public ATMSimulationResult<BaseScreenResponseData> renderScreen(ScreenRequestData requestData) {
+    public ATMSimulationResult<BaseScreenResponseData> renderScreen(ScreenRequestData requestData) throws ATMSimulationException {
         ATMSimulationResult<BaseScreenResponseData> response = new ATMSimulationResult<>();
 
         String accountNumber;
@@ -35,7 +35,7 @@ public class WelcomeScreenImpl implements Screen {
         do pin = readField(WelcomeScreenField.PIN); while (StringUtils.isBlank(pin));
 
         Account condition = new Account();
-        condition.setAccountNumber(Long.parseLong(accountNumber));
+        condition.setAccountNumber(accountNumber);
         condition.setPin(pin);
 
         Account userDetail = atmRepository.getLoginInfo(condition);

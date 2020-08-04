@@ -2,6 +2,8 @@ package com.mitrais.bootcamp.repository;
 
 import com.mitrais.bootcamp.domain.ATMSimulationException;
 import com.mitrais.bootcamp.domain.Account;
+import com.mitrais.bootcamp.domain.CSVReaderUtilException;
+import com.mitrais.bootcamp.domain.ErrorContext;
 import com.mitrais.bootcamp.util.AccountCSVParser;
 
 import java.io.IOException;
@@ -19,13 +21,13 @@ public class ATMRepository {
     static {
         Account account1 = new Account();
         account1.setName("John Doe");
-        account1.setAccountNumber(112233);
+        account1.setAccountNumber("112233");
         account1.setPin("012108");
         account1.setBalance(100);
 
         Account account2 = new Account();
         account2.setName("Jane Doe");
-        account2.setAccountNumber(112244);
+        account2.setAccountNumber("112244");
         account2.setPin("932012");
         account2.setBalance(30);
 
@@ -37,61 +39,39 @@ public class ATMRepository {
         return dataList;
     }
 
-    public Account getLoginInfo(final Account data) {
+    public Account getLoginInfo(final Account data) throws ATMSimulationException {
         return dataList.stream()
-                .filter(c -> c.getAccountNumber() == data.getAccountNumber() && c.getPin().equalsIgnoreCase(data.getPin()))
-//                .findFirst().orElseThrow(() -> new ATMSimulationException(new ErrorContext("invalid", "data not found")));
-                .findFirst().orElse(null);
+                .filter(c -> c.getAccountNumber().equals(data.getAccountNumber()) && c.getPin().equalsIgnoreCase(data.getPin()))
+                .findFirst().orElseThrow(() -> new ATMSimulationException(new ErrorContext("invalid", "data not found")));
+//                .findFirst().orElse(null);
     }
 
-    public Account getDataByAccountNumber(final long accountNumber) {
+    public Account getDataByAccountNumber(final String accountNumber) throws ATMSimulationException {
         //                .findFirst().orElse(null);
         return dataList.stream()
-                .filter(c -> c.getAccountNumber() == accountNumber)
-//                .findFirst().orElseThrow(() -> new ATMSimulationException(new ErrorContext("invalid","data not found")));
-                .findFirst().orElse(null);
+                .filter(c -> c.getAccountNumber().equals(accountNumber))
+                .findFirst().orElseThrow(() -> new ATMSimulationException(new ErrorContext("invalid","data not found")));
+//                .findFirst().orElse(null);
     }
 
-    public Account deductBalance(long accountNumber, long amount){
+    public Account deductBalance(String accountNumber, long amount) throws ATMSimulationException {
 
-        int index = -1;
+        Account dataByAccountNumber = getDataByAccountNumber(accountNumber);
+        dataByAccountNumber.deduct(amount);
 
-        for (Account data : dataList) {
-            if (data.getAccountNumber() == accountNumber) {
-                index = dataList.indexOf(data);
-                break;
-            }
-        }
-
-        if(index > -1){
-            dataList.get(index).setBalance(dataList.get(index).getBalance() - amount);
-            return dataList.get(index);
-        }
-
-        return null;
+        return dataByAccountNumber;
     }
 
-    public Account increaseBalance(long accountNumber, long amount){
+    public Account increaseBalance(String accountNumber, long amount) throws ATMSimulationException {
 
-        int index = -1;
+        Account dataByAccountNumber = getDataByAccountNumber(accountNumber);
+        dataByAccountNumber.increase(amount);
 
-        for (Account data : dataList) {
-            if (data.getAccountNumber() == accountNumber) {
-                index = dataList.indexOf(data);
-                break;
-            }
-        }
-
-        if(index > -1){
-            dataList.get(index).setBalance(dataList.get(index).getBalance() + amount);
-            return dataList.get(index);
-        }
-
-        return null;
+        return dataByAccountNumber;
 
     }
 
-    public void loadAccountDataFromCSV(String path) throws ATMSimulationException, IOException {
+    public void loadAccountDataFromCSV(String path) throws CSVReaderUtilException, IOException {
         AccountCSVParser accountCSVParser = new AccountCSVParser();
         dataList.addAll(accountCSVParser.parseFromCSV(path).stream().distinct().collect(Collectors.toList()));
         System.out.println("total account : "+dataList.size());

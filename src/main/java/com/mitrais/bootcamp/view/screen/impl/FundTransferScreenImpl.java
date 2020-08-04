@@ -153,7 +153,7 @@ public class FundTransferScreenImpl implements Screen {
     private void doFundTransfer(String destAccount, String trfAmount, long refNo){
 
         FundTransferRequest fundTransferRequest = new FundTransferRequest();
-        fundTransferRequest.setDestAccountNumber(Long.parseLong(destAccount));
+        fundTransferRequest.setDestAccountNumber(destAccount);
         fundTransferRequest.setSrcAccountNumber(userDetail.getAccountNumber());
         fundTransferRequest.setRefNumber(refNo);
         fundTransferRequest.setAmount(Long.parseLong(trfAmount));

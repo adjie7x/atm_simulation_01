@@ -49,11 +49,11 @@ public class ATMController {
         return new ATMController(welcomeScreen, transactionScreen, withdrawalScreen, fundTransferScreen, trxHistoryService);
     }
 
-    public void run(){
+    public void run() throws ATMSimulationException {
         welcomeScreen();
     }
 
-    private void welcomeScreen(){
+    private void welcomeScreen() throws ATMSimulationException {
         System.out.println();
         ATMSimulationResult<BaseScreenResponseData> welcomeScreenResponse = welcomeScreen.renderScreen(null);
         if(welcomeScreenResponse.isSuccess()){
@@ -64,14 +64,14 @@ public class ATMController {
         redirectScreen(welcomeScreenResponse);
     }
 
-    private void transactionScreen(){
+    private void transactionScreen() throws ATMSimulationException {
         System.out.println();
         ATMSimulationResult<BaseScreenResponseData> transactionScreenResponse = transactionScreen.renderScreen(null);
 
         redirectScreen(transactionScreenResponse);
     }
 
-    private void withdrawScreen(){
+    private void withdrawScreen() throws ATMSimulationException {
         System.out.println();
         WithdrawalScreenDataRequest dataRequest = new WithdrawalScreenDataRequest();
         dataRequest.setUserDetail(userDetail);
@@ -84,7 +84,7 @@ public class ATMController {
         redirectScreen(withdrawalScreenResponse);
     }
 
-    private void fundTransferScreen(){
+    private void fundTransferScreen() throws ATMSimulationException {
         System.out.println();
         FundTransferScreenDataRequest dataRequest = new FundTransferScreenDataRequest();
         dataRequest.setUserDetail(userDetail);
@@ -98,7 +98,7 @@ public class ATMController {
 
     }
 
-    private void trxHistoryScreen(){
+    private void trxHistoryScreen() throws ATMSimulationException {
         System.out.println();
         TrxHistoryScreenRequest dataRequest = new TrxHistoryScreenRequest();
         dataRequest.setUserDetail(userDetail);
@@ -107,7 +107,7 @@ public class ATMController {
         redirectScreen(transactionScreenResponse);
     }
 
-    private void redirectScreen(ATMSimulationResult<BaseScreenResponseData> result){
+    private void redirectScreen(ATMSimulationResult<BaseScreenResponseData> result) throws ATMSimulationException {
         BaseScreenResponseData baseScreenResponseData = result.getObject();
         if(result.isSuccess()){
             if(ScreenCode.TRANSACTION_SCREEN == baseScreenResponseData.getScreenCode()){

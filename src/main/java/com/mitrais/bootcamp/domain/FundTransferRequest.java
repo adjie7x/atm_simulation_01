@@ -10,15 +10,15 @@ package com.mitrais.bootcamp.domain;
  */
 public class FundTransferRequest extends BaseTransactionRequest {
 
-    private long destAccountNumber;
+    private String destAccountNumber;
     private long refNumber;
-    private long srcAccountNumber;
+    private String srcAccountNumber;
 
-    public long getDestAccountNumber() {
+    public String getDestAccountNumber() {
         return destAccountNumber;
     }
 
-    public void setDestAccountNumber(long destAccountNumber) {
+    public void setDestAccountNumber(String destAccountNumber) {
         this.destAccountNumber = destAccountNumber;
     }
 
@@ -30,11 +30,11 @@ public class FundTransferRequest extends BaseTransactionRequest {
         this.refNumber = refNumber;
     }
 
-    public long getSrcAccountNumber() {
+    public String getSrcAccountNumber() {
         return srcAccountNumber;
     }
 
-    public void setSrcAccountNumber(long srcAccountNumber) {
+    public void setSrcAccountNumber(String srcAccountNumber) {
         this.srcAccountNumber = srcAccountNumber;
     }
 }

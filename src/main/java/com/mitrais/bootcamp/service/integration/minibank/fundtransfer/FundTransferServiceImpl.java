@@ -36,7 +36,7 @@ public class FundTransferServiceImpl implements Transaction {
 
         ServiceTemplate.execute(result, new ServiceCallback() {
             @Override
-            public void checkParameter() {
+            public void checkParameter() throws ATMSimulationException {
                 if(fundTransferRequest.getAmount() == 0){
                     throw new ATMSimulationException(new ErrorContext("invalid", "Minimum amount to transfer is $1"));
                 }
@@ -47,7 +47,7 @@ public class FundTransferServiceImpl implements Transaction {
             }
 
             @Override
-            public void process() {
+            public void process() throws ATMSimulationException {
 
                 Account srcAccount = atmRepository.getDataByAccountNumber(fundTransferRequest.getSrcAccountNumber());
                 Account destAccount = atmRepository.getDataByAccountNumber(fundTransferRequest.getDestAccountNumber());

@@ -36,12 +36,12 @@ public class WithdrawalServiceImpl implements Transaction {
 
         ServiceTemplate.execute(result, new ServiceCallback() {
             @Override
-            public void checkParameter() {
+            public void checkParameter() throws ATMSimulationException {
                 if(withdrawalRequest == null){
                     throw new ATMSimulationException(new ErrorContext("null", "request can't be null"));
                 }
 
-                if(withdrawalRequest.getAccountNumber() == 0){
+                if(withdrawalRequest.getAccountNumber().isEmpty()){
                     throw new ATMSimulationException(new ErrorContext("invalid", "invalid account number"));
                 }
 
@@ -56,12 +56,12 @@ public class WithdrawalServiceImpl implements Transaction {
             }
 
             @Override
-            public void process() {
+            public void process() throws ATMSimulationException {
 
                 Account userDetail = atmRepository.getDataByAccountNumber(withdrawalRequest.getAccountNumber());
 
                 long userBalance = userDetail.getBalance();
-                long accountNumber = userDetail.getAccountNumber();
+                String accountNumber = userDetail.getAccountNumber();
 
                 if(userBalance < withdrawalRequest.getAmount()){
                     throw new ATMSimulationException(new ErrorContext("insufficient", "Insufficient balance $"+userBalance));

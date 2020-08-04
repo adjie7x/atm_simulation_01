@@ -10,13 +10,13 @@ package com.mitrais.bootcamp.domain;
  */
 public class WithdrawalRequest extends BaseTransactionRequest {
 
-    private long accountNumber;
+    private String accountNumber;
 
-    public long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(long accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 }
