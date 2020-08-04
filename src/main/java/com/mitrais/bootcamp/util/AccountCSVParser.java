@@ -1,7 +1,7 @@
 package com.mitrais.bootcamp.util;
 
-import com.mitrais.bootcamp.domain.ATMSimulationException;
 import com.mitrais.bootcamp.domain.Account;
+import com.mitrais.bootcamp.domain.CSVReaderUtilException;
 import com.mitrais.bootcamp.domain.ErrorContext;
 import org.apache.commons.csv.CSVRecord;
 
@@ -12,17 +12,17 @@ import org.apache.commons.csv.CSVRecord;
 public class AccountCSVParser extends CSVReaderUtil<Account> {
 
     @Override
-    protected Account parseRecord(CSVRecord record) {
+    protected Account parseRecord(CSVRecord record) throws CSVReaderUtilException {
 
         if(recordsMap.get(record.get("Account Number")) != null){
-            throw new ATMSimulationException(new ErrorContext("duplicate", "There can't be 2 different accounts with the same Account Number."+record.get("Account Number")));
+            throw new CSVReaderUtilException(new ErrorContext("duplicate", "There can't be 2 different accounts with the same Account Number."+record.get("Account Number")));
         }
 
         Account account = new Account();
         account.setName(record.get("Name"));
         account.setPin(record.get("PIN"));
         account.setBalance(Long.parseLong(record.get("Balance")));
-        account.setAccountNumber(Long.parseLong(record.get("Account Number")));
+        account.setAccountNumber(record.get("Account Number"));
 
         recordsMap.put(record.get("Account Number"), record.get("Account Number"));
 

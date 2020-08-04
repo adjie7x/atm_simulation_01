@@ -1,6 +1,6 @@
 package com.mitrais.bootcamp.util;
 
-import com.mitrais.bootcamp.domain.ATMSimulationException;
+import com.mitrais.bootcamp.domain.CSVReaderUtilException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -21,13 +21,15 @@ public abstract class CSVReaderUtil<T> {
     protected List<T> data = new ArrayList<>();
     Map<String, String> recordsMap = new HashMap<>();
 
-    protected abstract T parseRecord (CSVRecord record) throws ATMSimulationException;
+    protected abstract T parseRecord (CSVRecord record);
 
-    public List<T> parseFromCSV(String path) throws ATMSimulationException, IOException {
+    public List<T> parseFromCSV(String path) throws CSVReaderUtilException, IOException {
 
         Reader in = new FileReader(path);
         CSVParser records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
-        records.forEach(record -> this.data.add(this.parseRecord(record)));
+        records.forEach(record -> {
+            this.data.add(this.parseRecord(record));
+        });
 
         return this.data;
     }
