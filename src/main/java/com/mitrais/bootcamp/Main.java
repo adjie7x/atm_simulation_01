@@ -5,6 +5,7 @@
 package com.mitrais.bootcamp;
 
 import com.mitrais.bootcamp.domain.ATMSimulationException;
+import com.mitrais.bootcamp.domain.CSVReaderUtilException;
 import com.mitrais.bootcamp.repository.ATMRepository;
 import org.apache.commons.cli.*;
 
@@ -46,6 +47,8 @@ public class Main {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("java -jar atm_.jar -d c:\\account.csv", options);
         } catch (ATMSimulationException e){
+            System.out.println(e.getErrorContext().getErrorMessage());
+        } catch (CSVReaderUtilException e){
             System.out.println(e.getErrorContext().getErrorMessage());
         } catch (Exception e){
             System.out.println(e.getMessage());

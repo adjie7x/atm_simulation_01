@@ -37,20 +37,22 @@ public class TransactionHistoryImpl implements Transaction {
 
                 TransactionHistoryResponse transactionHistoryResponse = new TransactionHistoryResponse();
 
-                List<TransactionDTO> transactions = transactionRepository.getAllTransaction().stream()
-                        .filter(trxDto -> transactionHistoryRequest.getAccountNumber().equals(trxDto.getSrcAccount().getAccountNumber()))
-                        .sorted(Comparator.comparing(TransactionDTO::getTransactionDate))
-                        .sorted((o1, o2) -> o2.getTransactionDate().compareTo(o1.getTransactionDate()))
-                        .limit(transactionHistoryRequest.getLimit() == 0 ?10:transactionHistoryRequest.getLimit())
-                        .collect(Collectors.toList());
+                List<TransactionDTO> transactions = getTransactionDTOS();
 
-                if(transactions.size() > 0){
-                    transactionHistoryResponse.getTransactions().addAll(transactions);
-                }
+                transactionHistoryResponse.addTransactions(transactions);
 
                 result.setSuccess(true);
                 result.setObject(transactionHistoryResponse);
 
+            }
+
+            private List<TransactionDTO> getTransactionDTOS() {
+                return transactionRepository.getAllTransaction().stream()
+                                    .filter(trxDto -> transactionHistoryRequest.getAccountNumber().equals(trxDto.getSourceAccountNumber()))
+                                    .sorted(Comparator.comparing(TransactionDTO::getTransactionDate))
+                                    .sorted((o1, o2) -> o2.getTransactionDate().compareTo(o1.getTransactionDate()))
+                                    .limit(transactionHistoryRequest.getLimit() == 0 ?10:transactionHistoryRequest.getLimit())
+                                    .collect(Collectors.toList());
             }
         });
 

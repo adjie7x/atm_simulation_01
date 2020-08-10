@@ -18,4 +18,8 @@ public class TransactionHistoryResponse implements Transactionable {
     public void setTransactions(List<TransactionDTO> transactions) {
         this.transactions = transactions;
     }
+
+    public void addTransactions(List<TransactionDTO> transactions) {
+        this.transactions.addAll(transactions);
+    }
 }

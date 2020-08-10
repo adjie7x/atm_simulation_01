@@ -42,6 +42,10 @@ public class TransactionDTO {
         return srcAccount;
     }
 
+    public String getSourceAccountNumber() {
+        return srcAccount == null ? "" : srcAccount.getAccountNumber();
+    }
+
     public void setSrcAccount(Account srcAccount) {
         this.srcAccount = srcAccount;
     }
